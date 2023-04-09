@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Marketing template first page practice</title>
+        <script src="https://kit.fontawesome.com/d7998eeb15.js" crossorigin="anonymous"></script>
+        <style>
+            *
+            {
+                padding: 0;
+                margin: 0;
+                box-sizing: border-box;
+            }
+            body
+            {
+                padding: 10px;
+            }
+            body > h1
+            {
+                padding-bottom: 30px;
+            }
+            body > span
+            {
+                padding-bottom: 20px;
+                display: inline-block;
+            }
+            #wrappers
+            {
+                display: grid;
+                border: 1px solid;
+                grid-template-columns: 100% 100% 100%;
+                overflow: hidden;
+            }
+            #img-slider-wrapper img
+            {
+                max-width: 100%;
+            }
+            .img-wrapper 
+            {
+                position: relative;
+            }
+            #img-slider-wrapper .img-wrapper > span.text
+            {
+                position: absolute;
+                color: black;
+                background-color: white;
+                padding: 10px 15px;
+                font-size: 13px;
+                /* transition-property: top left right bottom;
+                transition-duration: 1s; */
+                transition: top 1s, right 1s, left 1s, bottom 1s, transform 1s;
+                /* transition-timing-function: linear; */
+                z-index: 2;
+            }
+            #img-slider-wrapper > #wrappers > .img-wrapper:first-child > span.text
+            {
+                left: 25px;
+            }
+            #img-slider-wrapper > #wrappers > .img-wrapper:nth-child(2) > span.text
+            {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            #img-slider-wrapper > #wrappers > .img-wrapper:nth-child(3) > span.text
+            {
+                right: 25px;
+            }
+            .displayAtBottom
+            {
+                top: 100%;
+            }
+            .moveNearTop
+            {
+                top: 30px;
+            }
+            .moveToCenter
+            {
+                top: 50%;
+                transform: translate(-50%);
+            }
+            .hide
+            {
+                /* display: none; */
+                visibility: hidden;
+            }
+            .show
+            {
+                /* display: block; */
+                visibility: visible;
+            }
+            #sliders
+            {
+                position: relative;
+                z-index: 1;
+                display: grid;
+                grid-template-columns: auto auto auto;
+                justify-content: space-between;
+                background-color: grey;
+            }
+            #sliders > .slider
+            {
+                padding: 10px;
+                color: white;
+                cursor: pointer;
+            }
+            #sliders > .slider > i::before
+            {
+                font-size: 20px;
+            }
+            #slider > #active-shower
+            {
+            }
+            #sliders #active-shower > .block
+            {
+                display: inline-block;
+                margin: 12px 1px;
+                padding: 6px;
+                border: 2px solid white;
+                align-self: center;
+            }
+            .active
+            {
+                background-color: white;
+            }
+
+        </style>
+    </head>
+    <body>
+        <h1>MARKETING</h1>
+        <span>Template by w3.css</span>
+            <div id="img-slider-wrapper">
+                <div id="wrappers">
+                    <div class="img-wrapper hide">
+                        <img src="coffee.jpg" alt="coffee" />
+                        <span id="coffee-text" class="text displayAtBottom">Lorem Ipsum</span>
+                    </div>
+                    <div class="img-wrapper hide">
+                        <img src="workbench.jpg" alt="workbench" />
+                        <span id="workbench-text" class="text">Hellow World</span>
+                    </div>
+                    <div class="img-wrapper hide">
+                        <img src="sound.jpg" alt="sound" />
+                        <span id="sound-text" class="text">HMMM WHAT!!</span>
+                    </div>
+                </div>
+                <div id="sliders">
+                    <span class="slider" id="left-slide"><i class="fa-sharp fa-solid fa-circle-left"></i></span>
+                    <div id="active-shower">
+                        <span class="active block"></span>
+                        <span class="block second"></span>
+                        <span class="block third"></span>
+                    </div>
+                    <span class="slider" id="right-slide"><i class="fa-sharp fa-solid fa-circle-right"></i></span>
+                </div>
+            </div>
+
+        <script type="text/javascript">
+            let imageone=document.querySelector(".img-wrapper:first-child > img");
+            let imageOneSpan=document.querySelector(".img-wrapper:first-child > span.text");
+            // imageone.onclick=function()
+            // {
+            //     imageOneSpan.classList.toggle("displayAtBottom");
+            //     imageOneSpan.classList.toggle("moveNearTop");
+            // }
+            let imagetwo=document.querySelector(".img-wrapper:nth-child(2) > img");
+            let imageTwoSpan=document.querySelector(".img-wrapper:nth-child(2) > span.text");
+            // imagetwo.onclick=function()
+            // {
+            //     imageTwoSpan.classList.toggle("displayAtBottom");
+            //     imageTwoSpan.classList.toggle("moveToCenter");
+            // }
+
+            let sliders=document.getElementsByClassName("slider");
+            let sliderLeft=sliders[0];
+            let sliderRight=sliders[1];
+            // let blocks=document.getElementsByClassName("block");
+            let blockContainer=document.getElementById("active-shower");
+            let blocks1=document.querySelectorAll(".block");
+            let blockOne=blocks1[0];
+            let blockTwo=blocks1[1];
+            let blockThree=blocks1[2];
+            // console.log(blockContainer);
+            let imgTextWrapper=document.querySelector("#img-slider-wrapper");
+            let imgAndText=document.querySelectorAll("#img-slider-wrapper > #wrappers > .img-wrapper");
+            let absoluteTexts=document.querySelectorAll(".img-wrapper > span.text");
+
+            window.onload=function()//for displaying translation animation when the page first loads
+            {
+                let spanTextOne=imgAndText[0].lastElementChild;
+                imgAndText[0].classList.add("show");
+                imgAndText[0].classList.remove("hide");
+                spanTextOne.classList.remove("displayAtBottom");
+                spanTextOne.classList.add("moveNearTop");
+            }
+
+            //left sliding
+            sliderLeft.addEventListener("click",()=>
+            {
+                let activeBlock;
+                let prevBlock;
+                blocks1.forEach((block)=>
+                {
+                    if(block.classList.contains("active"))//if block contains active then only activeBlock,prevBlock or nextBlock are to be computed
+                    {
+                        activeBlock=block;
+                        prevBlock=activeBlock.previousElementSibling;
+                        // console.log(!null);
+                        if(!prevBlock)
+                        {
+                            prevBlock=blockContainer.lastElementChild;
+                        }
+                        // console.log(prevBlock);
+                        activeBlock.classList.remove("active");//remove active from every block
+                    }
+                });
+                prevBlock.classList.add("active");
+
+                let visibleIAT;
+                let prevIAT;
+                imgAndText.forEach((IAT)=>//IAT==imgAndText
+                {
+                    if(IAT.classList.contains("show"))
+                    {
+                        visibleIAT=IAT;
+                        prevIAT=visibleIAT.previousElementSibling;
+                        if(!prevIAT)//if its the first IAT
+                        {
+                            prevIAT=imgAndText[2];
+                        }
+                        visibleIAT.classList.remove("show");
+                        visibleIAT.classList.add("hide");
+                    }
+                });
+                prevIAT.classList.remove("hide");
+                prevIAT.classList.add("show");
+                displayText();
+            });
+
+            displayText();
+            // for display of span text
+            function displayText()
+            {
+                //yadi imgAndText contains show, then remove display at bottom (the text) and add when it is hidden 
+
+                imgAndText.forEach((IAT)=>
+                {
+                    if(IAT.classList.contains("show"))
+                    {
+                        let IAT_span_text=IAT.lastElementChild;
+                        IAT_span_text.classList.remove("displayAtBottom");
+                        if(IAT==imgAndText[1])
+                        {
+                            IAT_span_text.classList.add("moveToCenter");
+                        }
+                        else
+                        {
+                            IAT_span_text.classList.add("moveNearTop");
+                        }
+                        //performing translation to display the visible i.e. the wrapper which contains show class
+                        if(IAT==imgAndText[0])
+                        {
+                            translate(0);
+                        }
+                        else if(IAT==imgAndText[1])
+                        {
+                            translate(-1);
+                        }
+                        else
+                        {
+                            translate(-2);
+                        }
+                    }
+                    else if(IAT.classList.contains("hide"))
+                    {
+                        let IAT_span_text=IAT.lastElementChild;
+                        IAT_span_text.classList.add("displayAtBottom");
+                        if(IAT==imgAndText[1])
+                        {
+                            IAT_span_text.classList.remove("moveToCenter");
+                        }
+                        else
+                        {
+                            IAT_span_text.classList.remove("moveNearTop");
+                        }
+                    }
+                });
+            }
+
+            //translate function
+            function translate(value)
+            {
+                imgAndText.forEach(wrapper=>
+                {
+                    wrapper.style.transform ="translateX(calc("+value+" * 100%))";
+                });
+            }
+            //right sliding
+            sliderRight.addEventListener("click",()=>
+            {
+                let activeBlock;
+                let nextBlock;
+                blocks1.forEach((block)=>
+                {
+                    if(block.classList.contains("active"))
+                    {
+                        activeBlock=block;
+                        nextBlock=activeBlock.nextElementSibling;
+                        if(!nextBlock)
+                        {
+                            nextBlock=blockContainer.firstElementChild;
+                        }
+                        activeBlock.classList.remove("active");
+                    }
+                });
+                nextBlock.classList.add("active");
+
+                let visibleIAT;
+                let nextIAT;
+                imgAndText.forEach((IAT)=>//IAT==imgAndText
+                {
+                    if(IAT.classList.contains("show"))
+                    {
+                        visibleIAT=IAT;
+                        nextIAT=visibleIAT.nextElementSibling;
+                        if(!nextIAT)//if its next sibling is the #sliders element
+                        {
+                            nextIAT=imgAndText[0];
+                            // console.log(nextIAT);
+                        }
+                        visibleIAT.classList.remove("show");
+                        visibleIAT.classList.add("hide");
+                    }
+                });
+                nextIAT.classList.remove("hide");
+                nextIAT.classList.add("show");
+
+                displayText();
+            });
+
+            //now by direct click on the blocks
+            let clickedBlock="first";
+            blocks1.forEach((block)=>
+            {
+                block.onclick=function()
+                {
+                    
+                }
+            });
+
+        </script>
+    </body>
+</html>
